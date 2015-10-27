@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+	<array name="pv_circular_in_colors">
+		<item>@style/LightInColorCircularProgressView</item>
+	</array>
+
+	<array name="button_raise_wave">
+		<item>@style/LightRaiseWaveButtonRippleStyle</item>
+	</array>
+
+</resources>

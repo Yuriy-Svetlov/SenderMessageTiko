@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="LightInColorCircularProgressView" parent="LightCircularProgressView">
+        <item name="pv_progressStyle">@style/LightInColorCircularProgressDrawable</item>
+    </style>
+
+    <style name="LightColorCircularProgressView" parent="LightCircularProgressView">
+        <item name="pv_progressStyle">@style/LightColorCircularProgressDrawable</item>
+    </style>
+
+    <style name="LightColorCircularProgressDrawable" parent="Material.Drawable.CircularProgress">
+        <item name="cpd_strokeColors">@array/progress_colors_light</item>
+    </style>
+
+    <style name="LightInColorCircularProgressDrawable" parent="LightInCircularProgressDrawable">
+        <item name="cpd_strokeColors">@array/progress_colors_light</item>
+    </style>
+
+    <style name="LightInCircularProgressDrawable" parent="Material.Drawable.CircularProgress">
+        <item name="cpd_strokeColor">@color/colorPrimary</item>
+        <item name="cpd_inAnimDuration">800</item>
+        <item name="cpd_inStepPercent">0.5</item>
+        <item name="cpd_inStepColors">@array/in_colors_light</item>
+        <item name="cpd_outAnimDuration">400</item>
+    </style>
+
+    <style name="LightCircularProgressView">
+        <item name="pv_autostart">false</item>
+        <item name="pv_circular">true</item>
+        <item name="pv_progressStyle">@style/LightCircularProgressDrawable</item>
+        <item name="pv_progressMode">indeterminate</item>
+    </style>
+
+    <style name="LightCircularProgressDrawable" parent="Material.Drawable.CircularProgress">
+        <item name="cpd_strokeColor">@color/colorPrimary</item>
+    </style>
+
+
+    <style name="LightRaiseWaveButtonRippleStyle" parent="Material.Drawable.Ripple.Wave.Light">
+        <item name="android:background">@drawable/bg_bt_raise</item>
+        <item name="rd_leftPadding">1dp</item>
+        <item name="rd_topPadding">1dp</item>
+        <item name="rd_rightPadding">1dp</item>
+        <item name="rd_bottomPadding">2dp</item>
+        <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Button</item>
+        <item name="android:textColor">@color/abc_primary_text_material_light</item>
+    </style>
+
+</resources>
