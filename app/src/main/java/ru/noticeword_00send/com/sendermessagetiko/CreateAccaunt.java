@@ -149,7 +149,6 @@ public class CreateAccaunt extends AppCompatActivity{
         timer = new CountDownTimer(timeA, 1000) {
             public void onTick(long millisUntilFinished) {
                 getTimeA--;
-                Log.i("111","getTime2 "+getTimeA);
             }
             public void onFinish() {
 
@@ -159,7 +158,6 @@ public class CreateAccaunt extends AppCompatActivity{
                     ResponseError(error);
                 }
                 getTimeA=7;
-                Log.i("111","getTime "+getTimeA);
             }
         }.start();
     }
