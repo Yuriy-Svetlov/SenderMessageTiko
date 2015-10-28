@@ -118,7 +118,7 @@ public class CreateAccaunt extends AppCompatActivity{
     private void AddLoader(){
         HttpVolley.getInstance(this).addToRequestQueue(RequestCreate());
     }
-
+ 
 
     private CustomJsonObject RequestCreate(){
         CustomJsonObject jsObjRequest = new CustomJsonObject(Request.Method.POST, url.getUrlCreateAccount(), JsonToStringCA() , new Response.Listener<JSONObject>() {
