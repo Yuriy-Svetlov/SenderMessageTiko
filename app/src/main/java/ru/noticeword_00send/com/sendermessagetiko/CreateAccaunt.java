@@ -118,7 +118,7 @@ public class CreateAccaunt extends AppCompatActivity{
     private void AddLoader(){
         HttpVolley.getInstance(this).addToRequestQueue(RequestCreate());
     }
- 
+
 
     private CustomJsonObject RequestCreate(){
         CustomJsonObject jsObjRequest = new CustomJsonObject(Request.Method.POST, url.getUrlCreateAccount(), JsonToStringCA() , new Response.Listener<JSONObject>() {
@@ -261,7 +261,7 @@ public class CreateAccaunt extends AppCompatActivity{
 
 
 
-
+    //TODO FIXME: 28.10.2015
     private boolean ValidDataCheck(){
     boolean lock=false;
         if (!Login.getText().toString().isEmpty() &&
