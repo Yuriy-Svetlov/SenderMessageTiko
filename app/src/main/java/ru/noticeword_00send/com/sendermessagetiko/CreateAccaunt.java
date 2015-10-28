@@ -87,7 +87,7 @@ public class CreateAccaunt extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 lockA=false;
-                String responseA="";
+                responseA="";
                 getTimeA=7;
                 //проверка валидность
                 if (ValidDataCheck() == true) {
