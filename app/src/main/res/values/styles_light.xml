@@ -47,4 +47,15 @@
         <item name="android:textColor">@color/abc_primary_text_material_light</item>
     </style>
 
+
+    <style  name="LightEditText"  parent="Material.Widget.EditText.Light">
+        <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Body1</item>
+        <item name="android:textColor">@color/abc_primary_text_material_light</item>
+        <item name="android:textColorHint">@color/abc_secondary_text_material_light</item>
+        <item name="et_dividerColor">@drawable/color_divider_light</item>
+        <item name="et_labelTextColor">@drawable/color_label_light</item>
+        <item name="et_supportTextErrorColor">#FFFF0000</item>
+        <item name="et_dividerErrorColor">#FFFF0000</item>
+    </style>
+
 </resources>

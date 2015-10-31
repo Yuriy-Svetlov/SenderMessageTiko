@@ -7,12 +7,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -36,18 +35,26 @@ import com.android.volley.VolleyError;
 
 
 /**
- * Created by Юрий on 17.10.2015.
+ *
+ * Используется для регистрации нового пользовательского аккаунта.
+ * @author Юрий
+ * @version  5.1 , 31/10/2015
+ *
+ *
  */
+
+
 public class CreateAccaunt extends AppCompatActivity{
 
-    private AutoCompleteTextView Login;
-    private AutoCompleteTextView Lastname;
-    private AutoCompleteTextView Name;
-    private AutoCompleteTextView Email;
+    private EditText Login;
+    private EditText Lastname;
+    private EditText Name;
+    private EditText Email;
     private EditText Password;
     private EditText PasswordSame;
     private ProgressView mProgressView;
     private Button Button_Create;
+    private View content;
 
     private API url;
     private static CountDownTimer timer;
@@ -66,18 +73,20 @@ public class CreateAccaunt extends AppCompatActivity{
         ThemeManager.init(this, 1, 0, null);
         setContentView(R.layout.create_account);
 
-        //находим элементы
-        Login = (AutoCompleteTextView) findViewById(R.id.login);
-        Name = (AutoCompleteTextView) findViewById(R.id.name);
-        Lastname = (AutoCompleteTextView) findViewById(R.id.lastname);
-        Email = (AutoCompleteTextView) findViewById(R.id.email2);
+
+        Login = (EditText) findViewById(R.id.login);
+        Name = (EditText) findViewById(R.id.name);
+        Lastname = (EditText) findViewById(R.id.lastname);
+        Email = (EditText) findViewById(R.id.email2);
         Password = (EditText) findViewById(R.id.password);
         PasswordSame = (EditText) findViewById(R.id.password2);
         mProgressView = (ProgressView) findViewById(R.id.login_progress2);
         Button_Create = (Button) findViewById(R.id.email_create_acc_button2);
 
+        content = findViewById(R.id.content);
 
-        //Скрываем клавиатуру
+
+
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         url = new API();
 
@@ -89,51 +98,49 @@ public class CreateAccaunt extends AppCompatActivity{
                 lockA=false;
                 responseA="";
                 getTimeA=7;
-                //проверка валидность
                 if (ValidDataCheck() == true) {
                     Button_Create.setEnabled(false);
                     AddLoader();
                     showProgress(true, false);
                 }
+
+
             }
         });
 
 
 
-
-        if (savedInstanceState != null) {
-            if (Login.getVisibility() != View.GONE) {
-
-            }
-        }
-
     }
 
 
-
-
-
-
-
+    /**
+     * Отправляет сформированый запрос на сервер, для создания пользовательского аккаунта.
+     * @see CreateAccaunt#RequestCreate()
+     */
     private void AddLoader(){
         HttpVolley.getInstance(this).addToRequestQueue(RequestCreate());
     }
 
-
+    /**
+     * Формирует запрос для создания аккаунта, но не отправляет его.
+     * @return CustomJsonObject - Возвращает сформированный запрос, и регистрирует слушатели для ответа, onResponse() и  ErrorListener().
+     * При ответе на запрос, слушаетли вызывают {@link CreateAccaunt#CreatePause(Boolean lock, String response,int timeA)}
+     * @see CreateAccaunt#AddLoader()
+     */
     private CustomJsonObject RequestCreate(){
         CustomJsonObject jsObjRequest = new CustomJsonObject(Request.Method.POST, url.getUrlCreateAccount(), JsonToStringCA() , new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                CreatePause(true, response.toString(), null, 7000);
+                CreatePause(true, response.toString(), 7000);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                CreatePause(false, null, "error32", 7000);
+                CreatePause(false, null, 7000);
             }
         });
         jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
+                5000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return jsObjRequest;
@@ -142,8 +149,17 @@ public class CreateAccaunt extends AppCompatActivity{
 
 
 
-
-    private void CreatePause(final Boolean lock, final String response, final String error, int timeA){
+    /**
+     * Эмулирует паузу в процессе отправки запроса на сервер.
+     * @param lock  если true , будет вызван метод {@link CreateAccaunt#ResponseOK(String response)}
+     *              , если false {@link CreateAccaunt#ResponseError()}.
+     * @param response   данные ответа от сервера, в формате JSON, могуть быть NULL.
+     * @param timeA  продолжительность задержки паузы в миллисекундах.
+     *
+     * @see CreateAccaunt#ResponseOK(String response)
+     * @see CreateAccaunt#ResponseError()
+     */
+    private void CreatePause(final Boolean lock,final String response,int timeA){
         lockA=lock;
         responseA=response;
         timer = new CountDownTimer(timeA, 1000) {
@@ -155,13 +171,20 @@ public class CreateAccaunt extends AppCompatActivity{
                 if(lock==true){
                     ResponseOK(response);
                 }else{
-                    ResponseError(error);
+                    ResponseError();
                 }
                 getTimeA=7;
             }
         }.start();
     }
 
+    /**
+     * Читает полученные данные от сервера в формате JSON. Если аккаунт был успешно создан,
+     * вызывается метод {@link CreateAccaunt#SharedPreferencesWrite(String Login, String Password)}.
+     * Если  аккаунт не был создан по запрошенным данным, вызывается {@link CreateAccaunt#SnackBarErrors(String erros)}
+     * @param response - данные в формате JSON
+     * @see CreateAccaunt#ResponseError()
+     */
     private void ResponseOK(String response){
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
@@ -171,21 +194,38 @@ public class CreateAccaunt extends AppCompatActivity{
             SharedPreferencesWrite(jsonWrite.Login, jsonWrite.Password);
             showProgress(false, false);
         }else{
-            //ошибка - дубликат
-            Log.i("111", "некорректный пароль");
+            SnackBarErrors(getResources().getString(R.string.SnackBareErrorsLogin));
             showProgress(false, true);
         }
         Button_Create.setEnabled(true);
     }
 
 
-    private void ResponseError(String  error){
-        //ошибка коннекта
-        Log.i("111","ResponseError ");
+
+
+    /**
+     * Выводит сообщение об ошибки сети
+     * @see CreateAccaunt#ResponseOK(String response)
+     */
+    private void ResponseError(){
+        SnackBarErrors(getResources().getString(R.string.SnackBareErrorsConnect));
         showProgress(false, true);
         Button_Create.setEnabled(true);
     }
 
+
+
+
+    /**
+     * Преобразовывает данные для создания аккаунта, в формат JSON
+     * @return json
+     *
+     *  @see CreateAccaunt#getLogin()
+     *  @see CreateAccaunt#getName()
+     *  @see CreateAccaunt#getEmail()
+     *  @see CreateAccaunt#getPassword()
+     *  @see CreateAccaunt#getLastname()
+     */
     @NonNull
     private String JsonToStringCA() {
         CreateLoginJson jsonTo = new CreateLoginJson();
@@ -249,62 +289,56 @@ public class CreateAccaunt extends AppCompatActivity{
                 if(getTimeB>7){
                     getTimeB=7;
                 }
-                CreatePause(lockB, responseB, responseB ,getTimeB*1000 );
+                CreatePause(lockB, responseB, getTimeB * 1000);
             }
         }
     }
 
 
 
-
-
-
-
-
-    //TODO FIXME: 28.10.2015
+    /**
+     * Проверяет все поля формы ввода создания пользовательского аккаунта, на валидность
+     *
+     * @return lock валидные данные = true
+     */
     private boolean ValidDataCheck(){
-    boolean lock=false;
-        if (!Login.getText().toString().isEmpty() &&
-            !Name.getText().toString().isEmpty() &&
-            !Email.getText().toString().isEmpty() &&
-            !Password.getText().toString().isEmpty() &&
-            !PasswordSame.getText().toString().isEmpty()) {
-
-            if(PasswordSame.getText().toString().equals(Password.getText().toString())){
-
-                if(Password.getText().toString().length()>=6 && Password.getText().toString().length()<=20){
-
-                    if(Email.getText().toString().contains("@") && Email.getText().toString().contains(".")){
-                        lock=true;
-                    }else{
-                          Email.setError(getString(R.string.error_invalid_email));
-                          Email.requestFocus();
-                    }
-                }else{
-                     Password.setError(getString(R.string.action_sign_in_short));
-                     Password.requestFocus();
-                     }
-            }else{
-                  PasswordSame.setError(getString(R.string.error_incorrect_password));
-                  PasswordSame.requestFocus();
-                  }
-
-        }else if (Login.getText().toString().isEmpty()){
-                  Login.setError(getString(R.string.error_field_required));
-                  Login.requestFocus();
-                  }else if (Name.getText().toString().isEmpty()){
-                            Name.setError(getString(R.string.error_field_required));
-                            Name.requestFocus();
-                            }else if (Email.getText().toString().isEmpty()){
-                                      Email.setError(getString(R.string.error_field_required));
-                                      Email.requestFocus();
-                                      }else if (Password.getText().toString().isEmpty()){
-                                                Password.setError(getString(R.string.error_field_required));
-                                                Password.requestFocus();
-                                                }else if (PasswordSame.getText().toString().isEmpty()){
-                                                          PasswordSame.setError(getString(R.string.error_field_required));
-                                                          PasswordSame.requestFocus();
-                                                          }
+    boolean lock=true;
+        if(lock){
+           if(!CheckValid(Login, getLogin(), R.string.error_login_short, false)) {
+            lock = false;
+           }
+        }
+        if(lock) {
+            if (!CheckValid(Name, getName(), R.string.error_name_short, false)) {
+                lock = false;
+            }
+        }
+        if(lock) {
+            if (!CheckLastnane(Lastname, getLastname())) {
+                lock = false;
+            }
+        }
+        if(lock) {
+            if (!CheckValid(Email, getEmail(), R.string.error_email_short, true)) {
+                lock = false;
+            }
+        }
+        if(lock) {
+            if (!CheckValid(Password, getPassword(), R.string.error_password_short, false)) {
+                lock = false;
+            }
+        }
+        if(lock) {
+            if (!CheckValid(PasswordSame, getPasswordSame(), R.string.prompt_password2, false)) {
+                lock = false;
+            }
+        }
+        if(lock) {
+            if (!getPassword().equals(getPasswordSame())) {
+                lock = false;
+                PasswordsDonotMatch(PasswordSame);
+            }
+        }
     return lock;
     }
 
@@ -312,6 +346,67 @@ public class CreateAccaunt extends AppCompatActivity{
 
 
 
+    /**
+     * Проверяет поле ввода формы для создания пользовательского аккаунта на валидность.
+     * @param object EditText
+     * @param str текстовая информация поля ввода
+     * @param StrErrors текст об ошибки из resources
+     * @param LockB false - только для Email
+     *
+     * @return lock валидные данные = true
+     */
+    private boolean CheckValid(EditText object, String str, int StrErrors, boolean LockB){
+        boolean lock=true;
+        if (str.equals("NONE")){
+            object.setError(getString(R.string.error_field_required));
+            object.requestFocus();
+            lock=false;
+        }else{
+            if(str.length()<3){
+                lock=false;
+                object.setError(getString(StrErrors));
+                object.requestFocus();
+            }else{
+                if(LockB){
+                    if (!str.contains("@") || !str.contains(".")) {
+                        lock = false;
+                        object.setError(getString(R.string.error_invalid_email));
+                        object.requestFocus();
+                    }
+                }
+            }
+        }
+        return lock;
+    }
+
+
+
+    /**
+     * Проверяет поле ввода фамилии, на количество введенных символов.
+     * @param object EditText
+     * @param str текст об ошибки из resources
+     *
+     * @return lock
+     */
+    private boolean CheckLastnane(EditText object, String str){
+        boolean lock=true;
+        if (!str.equals("NONE") && str.length()<3){
+            lock=false;
+            object.setError(getString(R.string.error_lastname_short));
+            object.requestFocus();
+        }
+        return lock;
+    }
+
+
+    /**
+     * Выводит сообщение о несовпадении паролей пользователя, при регистрации пользовательского аккаунта.
+     * @param object EditText
+     */
+    private void PasswordsDonotMatch(EditText object){
+        object.setError(getString(R.string.error_nomatch_password));
+        object.requestFocus();
+    }
 
 
 
@@ -323,20 +418,12 @@ public class CreateAccaunt extends AppCompatActivity{
 
 
 
+    /**
+     * Записывает логин и пароль пользователя SharedPreferences
+     * @param Login
+     * @param Password
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+     */
     private void SharedPreferencesWrite(String Login, String Password){
         SharedPreferences ShaLogin = getSharedPreferences("Login", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = ShaLogin.edit();
@@ -348,21 +435,24 @@ public class CreateAccaunt extends AppCompatActivity{
 
 
 
-
-
-
-
+    /**
+     * Скрывает, или показывает элементы пользовательского интерфейса
+     * формы ввода, для создания нового аккаунта. После чего вызывает прогресс-бар.
+     * @param show Если true скрывает элементы и вызвать прогресс-бар.
+     * @param errors Выводит элементы, и останавливает прогресс-бар если show=false, errors=true.
+     *               Останавливает прогресс-бар, если  show=false, errors=false
+     * @see CreateAccaunt#Visibility(boolean show)
+     * @see CreateAccaunt#Animate(boolean show)
+     * @see CreateAccaunt#show(boolean show)
+     */
     private void showProgress(final boolean show, final boolean errors) {
         final int time = 300;
         if(show==true){
-            //форма
             Animate(show);
             Login.animate().setDuration(time).alpha(show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
             @Override
                 public void onAnimationEnd(Animator animation) {
-                         //форма
                          Visibility(show);
-                         //Прогресс-бар
                          mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
                          mProgressView.start();
                          Login.animate().setListener(null);
@@ -370,8 +460,7 @@ public class CreateAccaunt extends AppCompatActivity{
             });
         }else{
               mProgressView.stop();
-
-              if(errors==true) {
+              if(errors) {
                   mProgressView.animate().setDuration(1000).alpha(show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                      @Override
                      public void onAnimationEnd(Animator animation) {
@@ -386,7 +475,10 @@ public class CreateAccaunt extends AppCompatActivity{
 
 
 
-
+    /**
+     * Скрывает или возобновляет элементы пользовательского интерфейса GONE or VISIBLE
+     * @param show
+     */
     private void Visibility(final boolean show){
         Login.setVisibility(show ? View.GONE : View.VISIBLE);
         Name.setVisibility(show ? View.GONE : View.VISIBLE);
@@ -397,9 +489,13 @@ public class CreateAccaunt extends AppCompatActivity{
         Button_Create.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 
+    /**
+     * Плавно делает прозрачными элементы пользовательского интерфейса.
+     * @param show
+     */
     private void Animate(final boolean show){
         final int time = 300;
-        if(show==false) {
+        if(!show) {
             Login.animate().setDuration(time).alpha(show ? 0 : 1);
         }
         Name.animate().setDuration(time).alpha(show ? 0 : 1);
@@ -410,6 +506,10 @@ public class CreateAccaunt extends AppCompatActivity{
         Button_Create.animate().setDuration(time).alpha(show ? 0 : 1);
     }
 
+    /**
+     * Резко делает прозрачными элементы пользовательского интерфейса.
+     * @param show
+     */
     private void show(boolean show){
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
         Visibility(show);
@@ -424,23 +524,24 @@ public class CreateAccaunt extends AppCompatActivity{
     }
 
 
+    /**
+     * Вызывает всплывающие сообщение Snackbar
+     * @param erros
+     *
+     */
+    private void SnackBarErrors(String erros){
+        Snackbar.make(content, erros, Snackbar.LENGTH_LONG).show();
+    }
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+    /**
+     * Возвращает логин пользователя, который он ввел в форму  ввода создания нового пользовательского аккаунта.
+     * @return login
+     *
+     */
     public String getLogin(){
         String login = "NONE";
         if(!Login.getText().toString().isEmpty()){
@@ -448,7 +549,11 @@ public class CreateAccaunt extends AppCompatActivity{
         }
         return login;
     }
-
+    /**
+     * Возвращает имя пользователя, который он ввел в форму  ввода создания нового пользовательского аккаунта.
+     * @return name
+     *
+     */
     public String getName(){
         String name = "NONE";
         if(!Name.getText().toString().isEmpty()){
@@ -456,7 +561,11 @@ public class CreateAccaunt extends AppCompatActivity{
         }
         return name;
     }
-
+    /**
+     * Возвращает Email пользователя, который он ввел в форму  ввода создания нового пользовательского аккаунта.
+     * @return email
+     *
+     */
     public String getEmail(){
         String email = "NONE";
         if(!Email.getText().toString().isEmpty()){
@@ -464,7 +573,11 @@ public class CreateAccaunt extends AppCompatActivity{
         }
         return email;
     }
-
+    /**
+     * Возвращает пароль пользователя, который он ввел в форму  ввода создания нового пользовательского аккаунта.
+     * @return password
+     *
+     */
     public String getPassword(){
         String password = "NONE";
         if(!Password.getText().toString().isEmpty()){
@@ -472,7 +585,23 @@ public class CreateAccaunt extends AppCompatActivity{
         }
         return password;
     }
-
+    /**
+     * Возвращает проверочный пароль пользователя, который он ввел в форму  ввода  создания нового пользовательского аккаунта.
+     * @return passwordSame
+     *
+     */
+    public String getPasswordSame(){
+        String passwordSame = "NONE";
+        if(!PasswordSame.getText().toString().isEmpty()){
+            passwordSame = PasswordSame.getText().toString().trim();
+        }
+        return passwordSame;
+    }
+    /**
+     * Возвращает фамилию пользователя, которую он ввел в форму ввода создания нового пользовательского аккаунта.
+     * @return lastname
+     *
+     */
     public String getLastname(){
         String lastname = "NONE";
         if(!Lastname.getText().toString().isEmpty()){
@@ -489,14 +618,12 @@ public class CreateAccaunt extends AppCompatActivity{
     @Override
     protected void onStop() {
         super.onStop();
-        if(timer!=null){
-            timer.cancel();
-            if (Login.getVisibility() == View.GONE) {
-                showProgress(false, true);
-                Button_Create.setEnabled(true);
-            }
-        }
+
+
+
     }
+
+
 
 
 

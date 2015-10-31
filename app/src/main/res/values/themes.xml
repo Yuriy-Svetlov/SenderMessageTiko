@@ -10,4 +10,10 @@
 		<item>@style/LightRaiseWaveButtonRippleStyle</item>
 	</array>
 
+
+	<array name="edittext">
+		<item>@style/LightEditText</item>
+	</array>
+
+
 </resources>
