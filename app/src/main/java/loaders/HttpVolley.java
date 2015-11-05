@@ -10,7 +10,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
 /**
- * Created by Юрий on 26.10.2015.
+ * Created by Юрий on 26.07.2015.
  */
 public class HttpVolley {
 private static HttpVolley mInstance;

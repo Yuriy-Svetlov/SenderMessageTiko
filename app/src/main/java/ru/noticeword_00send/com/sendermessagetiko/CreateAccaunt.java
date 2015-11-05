@@ -22,7 +22,7 @@ import com.rey.material.app.ThemeManager;
 import com.rey.material.widget.ProgressView;
 
 import org.json.JSONObject;
-import JsonClasses.CreateLoginJson;
+import Model.CreateLoginJson;
 import loaders.CustomJsonObject;
 
 import loaders.HttpVolley;
@@ -38,7 +38,7 @@ import com.android.volley.VolleyError;
  *
  * Используется для регистрации нового пользовательского аккаунта.
  * @author Юрий
- * @version  5.1 , 31/10/2015
+ * @version  5.1 , 31/07/2015
  *
  *
  */
@@ -336,7 +336,7 @@ public class CreateAccaunt extends AppCompatActivity{
         if(lock) {
             if (!getPassword().equals(getPasswordSame())) {
                 lock = false;
-                PasswordsDonotMatch(PasswordSame);
+                PasswordsDonotMatch(Password);
             }
         }
     return lock;
@@ -445,7 +445,7 @@ public class CreateAccaunt extends AppCompatActivity{
      * @see CreateAccaunt#Animate(boolean show)
      * @see CreateAccaunt#show(boolean show)
      */
-    private void showProgress(final boolean show, final boolean errors) {
+    private  void showProgress(final boolean show, final boolean errors) {
         final int time = 300;
         if(show==true){
             Animate(show);

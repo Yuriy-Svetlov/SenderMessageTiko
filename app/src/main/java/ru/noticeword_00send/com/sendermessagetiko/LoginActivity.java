@@ -21,9 +21,9 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-    /*private AutoCompleteTextView mEmailView;
+    //private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
-    */
+
     private Button mEmailCreateButton;
 
 
@@ -34,8 +34,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
 
-        /*mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        mPasswordView = (EditText) findViewById(R.id.password); */
+        //mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mPasswordView = (EditText) findViewById(R.id.password);
         mEmailCreateButton = (Button) findViewById(R.id.create_account_button);
 
 

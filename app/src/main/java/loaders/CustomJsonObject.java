@@ -5,7 +5,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONObject;
 
 /**
- * Created by Юрий on 26.10.2015.
+ * Created by Юрий on 26.07.2015.
  */
 public class CustomJsonObject extends JsonObjectRequest {
 
