@@ -38,7 +38,7 @@ public class LoginActivityTest {
 
 
     @Test
-    public void count_letter_login() {
+     public void count_letter_login() {
 
         onView(withId(R.id.create_account_button)).perform(click());
         Espresso.pressBack();
