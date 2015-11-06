@@ -318,7 +318,7 @@ public class CreateAccauntTest {
         onView(withId(R.id.password2)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
         onView(withId(R.id.email_create_acc_button2)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
 
-        mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+         mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         SystemClock.sleep(1000);
         mActivityRule.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         SystemClock.sleep(1000);
