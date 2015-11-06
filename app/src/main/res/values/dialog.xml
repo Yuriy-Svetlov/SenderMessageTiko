@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Snackbar errors -->
+    <string name="SnackBarClose">Close</string>
+    <string name="SnackBareErrorsConnect">Error connection network</string>
+    <string name="SnackBareErrorsLogin">A login with that name already exists</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_nomatch_password">The passwords do not match</string>
+
+    <string name="error_login_short">This login is too short</string>
+    <string name="error_name_short">This name is too short</string>
+    <string name="error_email_short">This email is too short</string>
+    <string name="error_lastname_short">This lastname is too short</string>
+    <string name="error_password_short">This password is too short</string>
+
+    <!-- Strings related to login -->
+    <string name="Create_account">Create account</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_password2">Password reiterative</string>
+    <string name="prompt_login">Login</string>
+    <string name="prompt_name">Name</string>
+    <string name="prompt_Lastname">Lastname (option)</string>
+    <string name="action_sign_in_short">Sign In</string>
+
+
+</resources>
