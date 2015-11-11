@@ -5,6 +5,7 @@
     <string name="SnackBarClose">Close</string>
     <string name="SnackBareErrorsConnect">Error connection network</string>
     <string name="SnackBareErrorsLogin">A login with that name already exists</string>
+    <string name="ErrorIncorrectPassAndLogin">Error: login and password combination is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_nomatch_password">The passwords do not match</string>

@@ -1,8 +1,30 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:id="@+id/contentLogin"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/barlogin"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+        <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarlogin"
+        app:title="@string/prompt_login"
+        app:titleTextColor="@color/colorwhite"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"/>
+    </android.support.design.widget.AppBarLayout>
+
+
+
+    <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -11,74 +33,130 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".LoginActivity">
 
-    <!-- Login progress -->
-    <ProgressBar android:id="@+id/login_progress" style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp" android:visibility="gone" />
+        <!-- Create Login -->
+        <com.rey.material.widget.ProgressView
+        android:id="@+id/login_progress"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:v_styleId="@array/pv_circular_in_colors"/>
 
-    <ScrollView android:id="@+id/login_form" android:layout_width="match_parent"
+        <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout android:id="@+id/email_login_form" android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:orientation="vertical">
+            <android.support.v4.widget.NestedScrollView
+            android:id="@+id/login_form"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <android.support.design.widget.TextInputLayout android:layout_width="match_parent"
+                <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <AutoCompleteTextView
-                    android:id="@+id/email"
-                    android:maxLength="20"
+
+                    <ImageView
+                    android:layout_width="95dp"
+                    android:layout_height="95dp"
+                    android:id="@+id/imageView"
+                    android:src="@mipmap/ic_launcher"
+                    android:layout_marginTop="@dimen/imagelayout_marginTop"
+                    android:layout_centerHorizontal="true"/>
+
+                    <TextView
+                        android:id="@+id/label_textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/labelName"
+                        android:textSize="40sp"
+                        android:layout_below="@+id/imageView"
+                        android:layout_centerHorizontal="true"/>
+
+                    <LinearLayout
+                    android:id="@+id/email_login_form2"
+                    android:layout_below="@+id/label_textView"
+                    android:layout_marginTop="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_email"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+                    android:orientation="vertical">
 
+                        <!-- Login  -->
+                        <android.support.design.widget.TextInputLayout
+                        android:id="@+id/InputLayoutLogin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:counterEnabled="false"
+                        app:counterMaxLength="20"
+                        app:counterTextAppearance="@style/counterText"
+                        app:counterOverflowTextAppearance="@style/counterOverride">
 
-            </android.support.design.widget.TextInputLayout>
+                            <EditText
+                            android:id="@+id/loginx"
+                            android:maxLength="@integer/etittext_maxlength"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/prompt_login"
+                            android:imeOptions="actionUnspecified"
+                            android:inputType="text"
+                            android:digits="@string/ChecksymbolLogin"
+                            android:maxLines="1"
+                            android:singleLine="true" />
 
-            <android.support.design.widget.TextInputLayout android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                        </android.support.design.widget.TextInputLayout>
 
-                <EditText
-                    android:maxLength="30"
-                    android:id="@+id/password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password"
-                    android:imeActionId="@+id/login"
-                    android:imeActionLabel="@string/action_sign_in_short"
-                    android:imeOptions="actionUnspecified"
-                    android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    />
+                        <!-- Password -->
+                        <android.support.design.widget.TextInputLayout
+                        android:id="@+id/InputLayoutPass"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:counterEnabled="false"
+                        app:counterMaxLength="29"
+                        app:counterTextAppearance="@style/counterText"
+                        app:counterOverflowTextAppearance="@style/counterOverride">
 
+                            <EditText
+                            android:id="@+id/passwordx"
+                            android:maxLength="@integer/passwordtext_maxlength"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/prompt_password"
+                            android:imeActionLabel="@string/action_sign_in_short"
+                            android:imeOptions="actionUnspecified"
+                            android:inputType="textPassword"
+                            android:digits="@string/ChecksymbolLogin"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+                        </android.support.design.widget.TextInputLayout>
 
+                        <com.rey.material.widget.Button
+                        android:id="@+id/login_button"
+                        app:rd_enable="true"
+                        style="?android:textAppearanceSmall"
+                        app:v_styleId="@array/button_raise_wave"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/size_button"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/action_sign_in_short"/>
 
-            </android.support.design.widget.TextInputLayout>
-
-            <com.rey.material.widget.Button
-                android:id="@+id/email_sign_in_button"
-                app:rd_enable="true"
-                app:v_styleId="@array/button_raise_wave"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:textSize="14sp"
-                android:layout_marginTop="16dp"
-                android:text="Sign in"
-                 />
-
-            <com.rey.material.widget.Button
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:text="Create account"
-                android:textSize="14sp"
-                android:id="@+id/create_account_button"
-                app:rd_enable="true"
-                app:v_styleId="@array/button_raise_wave"
-                android:layout_marginTop="20dp" />
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+                        <RelativeLayout
+                        android:id="@+id/Relative"
+                        android:layout_below="@+id/login_button"
+                        android:layout_marginTop="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                            <TextView
+                            android:id="@+id/createAccount_textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/Create_account"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:layout_centerHorizontal="true"/>
+                        </RelativeLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+            </android.support.v4.widget.NestedScrollView>
+        </RelativeLayout>
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

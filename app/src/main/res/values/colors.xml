@@ -5,18 +5,21 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     -->
+    <color name="background_RelativeLayout">#f0e0e0</color>
+    <color name="background_white">#ffffff</color>
 
 
 
 
     <color name="colornew">#FFFACD</color>
-
+    <color name="Creen">#9f6f6f</color>
     <color name="colorPrimary">#FF03A9F4</color>
     <color name="colorPrimaryDark">#ff0171c9</color>
     <color name="colorAccent">#FF00E5FF</color>
     <color name="colorControlNormal">#FF78909C</color>
     <color name="colorControlActivated">#FF03A9F4</color>
     <color name="colorSwitchThumbNormal">#FF78909C</color>
+    <color name="colorwhite">#f9fbfd</color>
 
     <color name="colorPrimaryQuarter">#3303A9F4</color>
     <color name="colorPrimaryHalf">#9003A9F4</color>

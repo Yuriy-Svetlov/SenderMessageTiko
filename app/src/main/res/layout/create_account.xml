@@ -4,183 +4,221 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/content"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
-<RelativeLayout
+    <android.support.design.widget.AppBarLayout
+    android:id="@+id/bar"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
+
+        <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        app:title="@string/Create_account"
+        app:titleTextColor="@color/colorwhite"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"/>
+    </android.support.design.widget.AppBarLayout>
+
+
+
+    <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".LoginActivity">
+    tools:context=".CreateAccaunt">
+
+        <!-- Create Login -->
+        <com.rey.material.widget.ProgressView
+        android:id="@+id/create_account_progress"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        android:layout_width="@dimen/progressview"
+        android:layout_height="@dimen/progressview"
+        app:v_styleId="@array/pv_circular_in_colors"/>
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+            <android.support.v4.widget.NestedScrollView
+            android:id="@+id/login_form2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+                <LinearLayout
+                android:id="@+id/email_login_form2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                    <!-- Login  -->
+                    <!-- Create Login  1-->
+                    <android.support.design.widget.TextInputLayout
+                    android:id="@+id/InputLayoutLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:counterEnabled="false"
+                    app:counterMaxLength="19"
+                    app:counterTextAppearance="@style/counterText"
+                    app:counterOverflowTextAppearance="@style/counterOverride">
+
+                        <EditText
+                        android:id="@+id/login"
+                        android:maxLength="@integer/etittext_maxlength"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_login"
+                        android:imeOptions="actionUnspecified"
+                        android:inputType="text"
+                        android:digits="@string/ChecksymbolLogin"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <!-- Name  -->
+                    <android.support.design.widget.TextInputLayout
+                    android:id="@+id/InputLayoutName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:counterEnabled="false"
+                    app:counterMaxLength="19"
+                    app:counterTextAppearance="@style/counterText"
+                    app:counterOverflowTextAppearance="@style/counterOverride">
+
+                        <EditText
+                        android:id="@+id/name"
+                        android:maxLength="@integer/etittext_maxlength"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_name"
+                        android:imeOptions="actionUnspecified"
+                        android:inputType="text"
+                        android:digits="@string/ChecksymbolName"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <!-- Lastname  -->
+                    <android.support.design.widget.TextInputLayout
+                    android:id="@+id/InputLayoutLastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:counterEnabled="false"
+                    app:counterMaxLength="19"
+                    app:counterTextAppearance="@style/counterText"
+                    app:counterOverflowTextAppearance="@style/counterOverride">
+
+                        <EditText
+                        android:id="@+id/lastname"
+                        android:maxLength="@integer/etittext_maxlength"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_Lastname"
+                        android:inputType="text"
+                        android:imeOptions="actionUnspecified"
+                        android:digits="@string/ChecksymbolName"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <!-- E-mail  -->
+                    <android.support.design.widget.TextInputLayout
+                    android:id="@+id/InputLayoutEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:counterEnabled="false"
+                    app:counterMaxLength="19"
+                    app:counterTextAppearance="@style/counterText"
+                    app:counterOverflowTextAppearance="@style/counterOverride">
+
+                        <EditText
+                        android:id="@+id/email2"
+                        android:maxLength="@integer/etittext_maxlength"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_email"
+                        android:imeOptions="actionUnspecified"
+                        android:inputType="textEmailAddress"
+                        android:digits="@string/ChecksymbolLogin"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                    </android.support.design.widget.TextInputLayout>
 
 
+                    <!-- Password -->
+                    <android.support.design.widget.TextInputLayout
+                    android:id="@+id/InputLayoutPass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:counterEnabled="false"
+                    app:counterMaxLength="29"
+                    app:counterTextAppearance="@style/counterText"
+                    app:counterOverflowTextAppearance="@style/counterOverride">
 
-    <!-- Create Login -->
-    <com.rey.material.widget.ProgressView
-     android:id="@+id/login_progress2"
-     android:layout_centerVertical="true"
-     android:layout_centerHorizontal="true"
-     android:visibility="gone"
-     android:layout_width="48dp"
-     android:layout_height="48dp"
-     app:v_styleId="@array/pv_circular_in_colors"/>
-
-      <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:gravity="center_horizontal"
-      android:orientation="vertical">
-
-             <ScrollView
-             android:id="@+id/login_form2"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
-                  <LinearLayout
-                  android:id="@+id/email_login_form2"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="vertical">
-                      <!-- Login  -->
-                      <!-- Create Login  1-->
-                       <android.support.design.widget.TextInputLayout
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content">
-
-                               <EditText
-                               android:id="@+id/login"
-                               android:maxLength="20"
-                               android:layout_width="match_parent"
-                               android:layout_height="wrap_content"
-                               android:hint="@string/prompt_login"
-                               android:imeOptions="actionUnspecified"
-                               android:inputType="text"
-                               android:digits="@string/ChecksymbolLogin"
-                               android:maxLines="1"
-                               android:singleLine="true" />
-
-                       </android.support.design.widget.TextInputLayout>
-
-                       <!-- Name  -->
-                       <android.support.design.widget.TextInputLayout
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content">
-
-                               <EditText
-                               android:id="@+id/name"
-                               android:maxLength="20"
-                               android:layout_width="match_parent"
-                               android:layout_height="wrap_content"
-                               android:hint="@string/prompt_name"
-                               android:imeOptions="actionUnspecified"
-                               android:inputType="text"
-                               android:digits="@string/ChecksymbolName"
-                               android:maxLines="1"
-                               android:singleLine="true" />
-
-                       </android.support.design.widget.TextInputLayout>
-
-                       <!-- Lastname  -->
-                       <android.support.design.widget.TextInputLayout
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content">
-
-                               <EditText
-                               android:id="@+id/lastname"
-                               android:maxLength="20"
-                               android:layout_width="match_parent"
-                               android:layout_height="wrap_content"
-                               android:hint="@string/prompt_Lastname"
-                               android:inputType="text"
-                               android:imeOptions="actionUnspecified"
-                               android:digits="@string/ChecksymbolName"
-                               android:maxLines="1"
-                               android:singleLine="true" />
-
-                       </android.support.design.widget.TextInputLayout>
-
-                       <!-- E-mail  -->
-                       <android.support.design.widget.TextInputLayout
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content">
-
-                               <EditText
-                               android:id="@+id/email2"
-                               android:maxLength="20"
-                               android:layout_width="match_parent"
-                               android:layout_height="wrap_content"
-                               android:hint="@string/prompt_email"
-                               android:imeOptions="actionUnspecified"
-                               android:inputType="textEmailAddress"
-                               android:digits="@string/ChecksymbolLogin"
-                               android:maxLines="1"
-                               android:singleLine="true" />
-
-                       </android.support.design.widget.TextInputLayout>
+                        <EditText
+                        android:id="@+id/password"
+                        android:maxLength="@integer/passwordtext_maxlength"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_password"
+                        android:imeActionLabel="@string/action_sign_in_short"
+                        android:imeOptions="actionUnspecified"
+                        android:inputType="textPassword"
+                        android:digits="@string/ChecksymbolLogin"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+                    </android.support.design.widget.TextInputLayout>
 
 
-                       <!-- Password -->
-                       <android.support.design.widget.TextInputLayout
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content">
+                    <!-- Password 2 -->
+                    <android.support.design.widget.TextInputLayout
+                    android:id="@+id/InputLayoutPass2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:counterEnabled="false"
+                    app:counterMaxLength="29"
+                    app:counterTextAppearance="@style/counterText"
+                    app:counterOverflowTextAppearance="@style/counterOverride">
 
-                               <EditText
-                               android:id="@+id/password"
-                               android:maxLength="30"
-                               android:layout_width="match_parent"
-                               android:layout_height="wrap_content"
-                               android:hint="@string/prompt_password"
-                               android:imeActionLabel="@string/action_sign_in_short"
-                               android:imeOptions="actionUnspecified"
-                               android:inputType="textPassword"
-                               android:digits="@string/ChecksymbolLogin"
-                               android:maxLines="1"
-                               android:singleLine="true" />
-                       </android.support.design.widget.TextInputLayout>
-
-
-                       <!-- Password 2 -->
-                       <android.support.design.widget.TextInputLayout
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content">
-
-                               <EditText
-                               android:id="@+id/password2"
-                               android:maxLength="30"
-                               android:layout_width="match_parent"
-                               android:layout_height="wrap_content"
-                               android:hint="@string/prompt_password2"
-                               android:imeActionId="@+id/login"
-                               android:imeActionLabel="@string/action_sign_in_short"
-                               android:imeOptions="actionUnspecified"
-                               android:inputType="textPassword"
-                               android:digits="@string/ChecksymbolLogin"
-                               android:maxLines="1"
-                               android:singleLine="true" />
-                       </android.support.design.widget.TextInputLayout>
+                        <EditText
+                        android:id="@+id/password2"
+                        android:maxLength="@integer/passwordtext_maxlength"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_password2"
+                        android:imeActionId="@+id/login"
+                        android:imeActionLabel="@string/action_sign_in_short"
+                        android:imeOptions="actionUnspecified"
+                        android:inputType="textPassword"
+                        android:digits="@string/ChecksymbolLogin"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+                    </android.support.design.widget.TextInputLayout>
 
 
-
-                       <com.rey.material.widget.Button
-                       android:id="@+id/email_create_acc_button2"
-                       app:rd_enable="true"
-                       app:v_styleId="@array/button_raise_wave"
-                       android:layout_width="match_parent"
-                       android:layout_height="40dp"
-                       android:layout_marginTop="16dp"
-                       android:text="Create account"
-                       />
-
-
-                  </LinearLayout>
-             </ScrollView>
-      </LinearLayout>
-
-
-
-</RelativeLayout>
+                    <com.rey.material.widget.Button
+                    android:id="@+id/create_acc_button"
+                    app:rd_enable="true"
+                    style="?android:textAppearanceSmall"
+                    app:v_styleId="@array/button_raise_wave"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size_button"
+                    android:layout_marginTop="16dp"
+                    android:text="Create account"/>
+                </LinearLayout>
+            </android.support.v4.widget.NestedScrollView>
+        </LinearLayout>
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
+

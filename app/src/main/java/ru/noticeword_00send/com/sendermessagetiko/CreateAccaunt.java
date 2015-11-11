@@ -4,20 +4,33 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
+
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.AppBarLayout.OnOffsetChangedListener;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+
 import android.support.v7.app.AppCompatActivity;
 
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import com.rey.material.app.Dialog;
+import com.rey.material.app.DialogFragment;
+import com.rey.material.app.SimpleDialog;
 import com.rey.material.app.ThemeManager;
 import com.rey.material.widget.ProgressView;
 
@@ -27,6 +40,7 @@ import loaders.CustomJsonObject;
 
 import loaders.HttpVolley;
 import API.API;
+
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -42,9 +56,7 @@ import com.android.volley.VolleyError;
  *
  *
  */
-
-
-public class CreateAccaunt extends AppCompatActivity{
+public class CreateAccaunt extends AppCompatActivity {
 
     private EditText Login;
     private EditText Lastname;
@@ -54,17 +66,20 @@ public class CreateAccaunt extends AppCompatActivity{
     private EditText PasswordSame;
     private ProgressView mProgressView;
     private Button Button_Create;
-    private View content;
+    private CoordinatorLayout content;
+    private AppBarLayout appbar;
+    private Toolbar toolbar;
+    private AppBarLayout.LayoutParams toolbarLayoutParams;
+
 
     private API url;
     private static CountDownTimer timer;
+    private OnOffsetChangedListener LisnerOn = null;
+
 
     private Boolean lockA=false;
     private String responseA="";
     private static int getTimeA=7;
-
-
-
 
 
     @Override
@@ -80,37 +95,38 @@ public class CreateAccaunt extends AppCompatActivity{
         Email = (EditText) findViewById(R.id.email2);
         Password = (EditText) findViewById(R.id.password);
         PasswordSame = (EditText) findViewById(R.id.password2);
-        mProgressView = (ProgressView) findViewById(R.id.login_progress2);
-        Button_Create = (Button) findViewById(R.id.email_create_acc_button2);
 
-        content = findViewById(R.id.content);
-
+        mProgressView = (ProgressView) findViewById(R.id.create_account_progress);
+        Button_Create = (Button) findViewById(R.id.create_acc_button);
+        appbar = (AppBarLayout) findViewById(R.id.bar);
+        content = (CoordinatorLayout) findViewById(R.id.content);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
 
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        toolbarLayoutParams = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
         url = new API();
-
+        initViews(appbar);
 
 
         Button_Create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                lockA=false;
-                responseA="";
-                getTimeA=7;
-                if (ValidDataCheck() == true) {
+                lockA = false;
+                responseA = "";
+                getTimeA = 7;
+                if (ValidDataCheck()) {
                     Button_Create.setEnabled(false);
                     AddLoader();
                     showProgress(true, false);
                 }
-
-
             }
         });
 
-
-
     }
+
+
+
 
 
     /**
@@ -147,8 +163,6 @@ public class CreateAccaunt extends AppCompatActivity{
     }
 
 
-
-
     /**
      * Эмулирует паузу в процессе отправки запроса на сервер.
      * @param lock  если true , будет вызван метод {@link CreateAccaunt#ResponseOK(String response)}
@@ -167,7 +181,6 @@ public class CreateAccaunt extends AppCompatActivity{
                 getTimeA--;
             }
             public void onFinish() {
-
                 if(lock==true){
                     ResponseOK(response);
                 }else{
@@ -190,8 +203,7 @@ public class CreateAccaunt extends AppCompatActivity{
         Gson gson = builder.create();
         CreateLoginJson jsonWrite = gson.fromJson(response, CreateLoginJson.class);
         if(jsonWrite.UserID!=234) {
-            //записываем пароль и логин
-            SharedPreferencesWrite(jsonWrite.Login, jsonWrite.Password);
+            SharedPreferencesWrite(jsonWrite.Login, jsonWrite.Password, jsonWrite.UserID);
             showProgress(false, false);
         }else{
             SnackBarErrors(getResources().getString(R.string.SnackBareErrorsLogin));
@@ -201,19 +213,15 @@ public class CreateAccaunt extends AppCompatActivity{
     }
 
 
-
-
     /**
      * Выводит сообщение об ошибки сети
      * @see CreateAccaunt#ResponseOK(String response)
      */
     private void ResponseError(){
-        SnackBarErrors(getResources().getString(R.string.SnackBareErrorsConnect));
+        //SnackBarErrors(getResources().getString(R.string.SnackBareErrorsConnect));
         showProgress(false, true);
         Button_Create.setEnabled(true);
     }
-
-
 
 
     /**
@@ -240,23 +248,6 @@ public class CreateAccaunt extends AppCompatActivity{
         Gson gson = builder.create();
         return gson.toJson(jsonTo).toString();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     @Override
@@ -292,8 +283,8 @@ public class CreateAccaunt extends AppCompatActivity{
                 CreatePause(lockB, responseB, getTimeB * 1000);
             }
         }
-    }
 
+    }
 
 
     /**
@@ -343,9 +334,6 @@ public class CreateAccaunt extends AppCompatActivity{
     }
 
 
-
-
-
     /**
      * Проверяет поле ввода формы для создания пользовательского аккаунта на валидность.
      * @param object EditText
@@ -379,8 +367,6 @@ public class CreateAccaunt extends AppCompatActivity{
         return lock;
     }
 
-
-
     /**
      * Проверяет поле ввода фамилии, на количество введенных символов.
      * @param object EditText
@@ -408,32 +394,20 @@ public class CreateAccaunt extends AppCompatActivity{
         object.requestFocus();
     }
 
-
-
-
-
-
-
-
-
-
-
     /**
      * Записывает логин и пароль пользователя SharedPreferences
      * @param Login
      * @param Password
 
      */
-    private void SharedPreferencesWrite(String Login, String Password){
+    private void SharedPreferencesWrite(String Login, String Password, int UserID){
         SharedPreferences ShaLogin = getSharedPreferences("Login", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = ShaLogin.edit();
         editor.putString("Login", Login);
         editor.putString("Password", Password);
+        editor.putInt("UserID", UserID);
         editor.apply();
     }
-
-
-
 
     /**
      * Скрывает, или показывает элементы пользовательского интерфейса
@@ -447,32 +421,92 @@ public class CreateAccaunt extends AppCompatActivity{
      */
     private  void showProgress(final boolean show, final boolean errors) {
         final int time = 300;
-        if(show==true){
+        if (show){
             Animate(show);
-            Login.animate().setDuration(time).alpha(show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+            Login.animate().setDuration(time).alpha(1).setListener(new AnimatorListenerAdapter() {
             @Override
                 public void onAnimationEnd(Animator animation) {
-                         Visibility(show);
-                         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                         mProgressView.start();
-                         Login.animate().setListener(null);
-                 }
+                    Visibility(show);
+                    mProgressView.setVisibility(View.VISIBLE);
+                    toolbarLayoutParams.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+                    toolbar.setLayoutParams(toolbarLayoutParams);
+                    new CountDownTimer(time, 100) {
+                        public void onTick(long millisUntilFinished) {}
+                        public void onFinish() {
+                            appbar.setExpanded(false, true);
+                        }
+                    }.start();
+                    Login.animate().setListener(null);
+                }
             });
         }else{
               mProgressView.stop();
               if(errors) {
-                  mProgressView.animate().setDuration(1000).alpha(show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                     @Override
-                     public void onAnimationEnd(Animator animation) {
-                        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                         Visibility(show);
-                         Animate(show);
+                  new CountDownTimer(time, 100) {
+                  public void onTick(long millisUntilFinished) {}
+                      public void onFinish() {
+                          appbar.setExpanded(true, true);
+                      }
+                  }.start();
+
+                  mProgressView.animate().setDuration(900).alpha(1).setListener(new AnimatorListenerAdapter() {
+                  @Override
+                  public void onAnimationEnd(Animator animation) {
+                      mProgressView.setVisibility(View.GONE);
+                      Visibility(show);
+                      Animate(show);
+                          new CountDownTimer(time, 100) {
+                          public void onTick(long millisUntilFinished) {}
+                              public void onFinish() {
+                                  SnackBarErrors(getResources().getString(R.string.SnackBareErrorsConnect));
+                                  toolbarLayoutParams.setScrollFlags(0);
+                                  toolbar.setLayoutParams(toolbarLayoutParams);
+                              }
+                          }.start();
                      }
                   });
               }
         }
     }
 
+
+
+    private enum State {
+        EXPANDED,
+        COLLAPSED,
+        IDLE
+    }
+
+    /**
+     * регистрирует слушатель состояния для AppBarLayout
+     * @param appbar AppBarLayout
+     */
+    private void initViews(AppBarLayout appbar) {
+        if(LisnerOn!=null) {
+            appbar.removeOnOffsetChangedListener(LisnerOn);
+        }
+        appbar.addOnOffsetChangedListener(LisnerOn = new AppBarLayout.OnOffsetChangedListener() {
+            private State state;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (verticalOffset == 0) {
+                    if (state != State.EXPANDED) {
+                    }
+                    state = State.EXPANDED;
+                } else if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()) {
+                    if (state != State.COLLAPSED) {
+                        mProgressView.start();
+                    }
+                    state = State.COLLAPSED;
+                } else {
+                    if (state != State.IDLE) {
+                    }
+                    state = State.IDLE;
+                }
+            }
+        });
+    }
 
 
     /**
@@ -532,9 +566,6 @@ public class CreateAccaunt extends AppCompatActivity{
     private void SnackBarErrors(String erros){
         Snackbar.make(content, erros, Snackbar.LENGTH_LONG).show();
     }
-
-
-
 
 
     /**
@@ -611,8 +642,13 @@ public class CreateAccaunt extends AppCompatActivity{
     }
 
 
-
-
+    /**
+     * Возвращает объект mProgressView
+     * @return ProgressView
+     */
+    public ProgressView getProgress(){
+        return mProgressView;
+    }
 
 
     @Override
@@ -620,10 +656,30 @@ public class CreateAccaunt extends AppCompatActivity{
         super.onStop();
 
 
-
     }
 
+    @Override
+    public void onBackPressed() {
+        Dialog.Builder builder = null;
+        boolean isLightTheme = ThemeManager.getInstance().getCurrentTheme() == 0;
+        builder = new SimpleDialog.Builder(isLightTheme ? R.style.SimpleDialogLight : R.style.SimpleDialog){
+            @Override
+            public void onPositiveActionClicked(DialogFragment fragment) {
+                finish();
+                super.onPositiveActionClicked(fragment);
+            }
+            @Override
+            public void onNegativeActionClicked(DialogFragment fragment) {
 
+                super.onNegativeActionClicked(fragment);
+            }
+        };
+        ((SimpleDialog.Builder)builder).message("Exit from draft?")
+                .positiveAction("DISCARD")
+                .negativeAction("CANCEL");
+        DialogFragment fragment = DialogFragment.newInstance(builder);
+        fragment.show(getSupportFragmentManager(), null);
+    }
 
 
 

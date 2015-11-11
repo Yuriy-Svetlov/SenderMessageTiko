@@ -1,7 +1,15 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
+    <!-- -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="size_button">48dp</dimen>
+    <dimen name="progressview">48dp</dimen>
+
+    <integer name="etittext_maxlength">20</integer>
+    <integer name="passwordtext_maxlength">30</integer>
+
+    <dimen name="imagelayout_marginTop">40dp</dimen>
 
 
 </resources>
